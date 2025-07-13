@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Malla Interactiva - Educación Básica</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fff0f5;
+      padding: 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+      color: #c71585;
+    }
+
+    h2 {
+      color: #d87093;
+    }
+
+    .semestre {
+      margin-bottom: 40px;
+      border-bottom: 2px dashed #ffc0cb;
+      padding-bottom: 20px;
+    }
+
+    .ramos {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .ramo {
+      background: #ffe4e1;
+      border: 2px solid #ffc0cb;
+      border-radius: 10px;
+      padding: 15px;
+      width: 220px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .ramo.aprobado {
+      text-decoration: line-through;
+      opacity: 0.5;
+    }
+
+    .progress {
+      margin: 10px 0;
+      background: #ffe4e1;
+      border-radius: 20px;
+      overflow: hidden;
+      height: 25px;
+      width: 100%;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: #ff69b4;
+      width: 0%;
+      color: #fff;
+      text-align: center;
+      line-height: 25px;
+      transition: width 0.3s ease-in-out;
+    }
+
+    .general-progress {
+      margin: 30px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎓 Malla Interactiva - Educación Básica</h1>
+
+  <div class="general-progress">
+    <h2>Progreso General</h2>
+    <div class="progress"><div class="progress-bar" id="general-bar">0%</div></div>
+  </div>
+
+  <!-- Ejemplo con dos semestres, tú copiarás más bloques -->
+  <div class="semestre" data-semestre="1">
+    <h2>Primer semestre</h2>
+    <div class="progress"><div class="progress-bar"></div></div>
+    <div class="ramos">
+      <div class="ramo" data-id="s1-r1">CONSTRUCCION DEL CONOCIMIENTO CIENTIFICO</div>
+      <div class="ramo" data-id="s1-r2">EXPERIENCIA PEDAGOGICA INTEGRADA 1</div>
+      <div class="ramo" data-id="s1-r3">CONSTRUCCION DEL CONOCIMIENTO HISTORICO</div>
+      <div class="ramo" data-id="s1-r4">ANTROPOLOGIA CRISTIANA</div>
+      <!-- Agrega los otros ramos -->
+    </div>
+  </div>
+
+  <div class="semestre" data-semestre="2">
+    <h2>Segundo semestre</h2>
+    <div class="progress"><div class="progress-bar"></div></div>
+    <div class="ramos">
+      <div class="ramo" data-id="s2-r1">CONSTRUCCION DEL PENSAMIENTO INFANTIL: MATEMATIZACION INICIAL 1</div>
+      <div class="ramo" data-id="s2-r2">NEUROCIENCIAS Y EDUCACION</div>
+      <!-- Agrega los otros ramos -->
+    </div>
+  </div>
+
+  <!-- Repite para todos los semestres -->
+
+  <script>
+    const semestres = document.querySelectorAll('.semestre');
+    const generalBar = document.getElementById('general-bar');
+
+    let allRamos = [];
+
+    semestres.forEach(semestre => {
+      const ramos = semestre.querySelectorAll('.ramo');
+      allRamos = allRamos.concat(Array.from(ramos));
+      
+      ramos.forEach(ramo => {
+        // Cargar estado guardado
+        const id = ramo.dataset.id;
+        if (localStorage.getItem(id) === 'true') {
+          ramo.classList.add('aprobado');
+        }
+
+        ramo.addEventListener('click', () => {
+          ramo.classList.toggle('aprobado');
+          localStorage.setItem(id, ramo.classList.contains('aprobado'));
+          updateProgress();
+        });
+      });
+    });
+
+    function updateProgress() {
+      let totalAprobados = 0;
+      let totalRamos = 0;
+
+      semestres.forEach(semestre => {
+        const ramos = semestre.querySelectorAll('.ramo');
+        const aprobados = semestre.querySelectorAll('.ramo.aprobado').length;
+        const progressBar = semestre.querySelector('.progress-bar');
+        const porcentaje = Math.round((aprobados / ramos.length) * 100);
+        progressBar.style.width = porcentaje + '%';
+        progressBar.textContent = porcentaje + '%';
+
+        totalAprobados += aprobados;
+        totalRamos += ramos.length;
+      });
+
+      const totalPorcentaje = Math.round((totalAprobados / totalRamos) * 100);
+      generalBar.style.width = totalPorcentaje + '%';
+      generalBar.textContent = totalPorcentaje + '%';
+    }
+
+    // Inicializar progreso al cargar
+    updateProgress();
+  </script>
+</body>
+</html>
