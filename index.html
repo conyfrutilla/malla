@@ -1,158 +1,210 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Malla Interactiva - Educación Básica</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Malla Interactiva - Constanza</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', sans-serif;
       background: #fff0f5;
-      padding: 20px;
-      max-width: 1000px;
-      margin: auto;
+      margin: 0;
+      padding: 2rem;
     }
-
     h1 {
       text-align: center;
-      color: #c71585;
+      color: #b56576;
     }
-
-    h2 {
-      color: #d87093;
-    }
-
     .semestre {
-      margin-bottom: 40px;
-      border-bottom: 2px dashed #ffc0cb;
-      padding-bottom: 20px;
+      margin-bottom: 2rem;
     }
-
-    .ramos {
+    .titulo-semestre {
+      font-size: 1.5rem;
+      color: #6d6875;
+      margin-bottom: 0.5rem;
+    }
+    .contenedor-ramos {
       display: flex;
       flex-wrap: wrap;
-      gap: 15px;
+      gap: 1rem;
     }
-
     .ramo {
-      background: #ffe4e1;
-      border: 2px solid #ffc0cb;
-      border-radius: 10px;
-      padding: 15px;
-      width: 220px;
+      flex: 1 1 250px;
+      padding: 1rem;
+      border-radius: 1rem;
+      background-color: #f9c5d1;
       cursor: pointer;
-      transition: 0.3s;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s;
     }
-
+    .ramo:hover {
+      transform: scale(1.02);
+    }
     .ramo.aprobado {
       text-decoration: line-through;
       opacity: 0.5;
     }
-
-    .progress {
-      margin: 10px 0;
-      background: #ffe4e1;
-      border-radius: 20px;
-      overflow: hidden;
-      height: 25px;
-      width: 100%;
-    }
-
-    .progress-bar {
-      height: 100%;
-      background: #ff69b4;
-      width: 0%;
-      color: #fff;
+    .avance {
+      margin: 2rem 0;
       text-align: center;
-      line-height: 25px;
-      transition: width 0.3s ease-in-out;
-    }
-
-    .general-progress {
-      margin: 30px 0;
+      font-weight: bold;
+      color: #6d6875;
     }
   </style>
 </head>
 <body>
-  <h1>🎓 Malla Interactiva - Educación Básica</h1>
-
-  <div class="general-progress">
-    <h2>Progreso General</h2>
-    <div class="progress"><div class="progress-bar" id="general-bar">0%</div></div>
-  </div>
-
-  <!-- Ejemplo con dos semestres, tú copiarás más bloques -->
-  <div class="semestre" data-semestre="1">
-    <h2>Primer semestre</h2>
-    <div class="progress"><div class="progress-bar"></div></div>
-    <div class="ramos">
-      <div class="ramo" data-id="s1-r1">CONSTRUCCION DEL CONOCIMIENTO CIENTIFICO</div>
-      <div class="ramo" data-id="s1-r2">EXPERIENCIA PEDAGOGICA INTEGRADA 1</div>
-      <div class="ramo" data-id="s1-r3">CONSTRUCCION DEL CONOCIMIENTO HISTORICO</div>
-      <div class="ramo" data-id="s1-r4">ANTROPOLOGIA CRISTIANA</div>
-      <!-- Agrega los otros ramos -->
-    </div>
-  </div>
-
-  <div class="semestre" data-semestre="2">
-    <h2>Segundo semestre</h2>
-    <div class="progress"><div class="progress-bar"></div></div>
-    <div class="ramos">
-      <div class="ramo" data-id="s2-r1">CONSTRUCCION DEL PENSAMIENTO INFANTIL: MATEMATIZACION INICIAL 1</div>
-      <div class="ramo" data-id="s2-r2">NEUROCIENCIAS Y EDUCACION</div>
-      <!-- Agrega los otros ramos -->
-    </div>
-  </div>
-
-  <!-- Repite para todos los semestres -->
+  <h1>Malla Interactiva - Pedagogía en Educación Básica</h1>
+  <div id="malla"></div>
+  <div class="avance" id="avance"></div>
 
   <script>
-    const semestres = document.querySelectorAll('.semestre');
-    const generalBar = document.getElementById('general-bar');
+    const malla = document.getElementById('malla');
+    const avanceBox = document.getElementById('avance');
 
-    let allRamos = [];
+    const datos = [
+      {
+        semestre: 1,
+        ramos: [
+          "CONSTRUCCION DEL CONOCIMIENTO CIENTIFICO",
+          "EXPERIENCIA PEDAGOGICA INTEGRADA 1",
+          "CONSTRUCCION DEL CONOCIMIENTO HISTORICO, GEOGRAFICO Y DE LAS CIENCIAS SOCIALES",
+          "ANTROPOLOGIA CRISTIANA",
+          "CONSTRUCCION DEL CONOCIMIENTO LINGUISTICO",
+          "ESTRATEGIAS DISCURSIVAS PARA ACCEDER AL CONOCIMIENTO DISCIPLINAR",
+          "CONSTRUCCION DEL CONOCIMIENTO MATEMATICO",
+          "PSICOLOGIA DE LA NIÑEZ Y DE LA ADOLESCENCIA"
+        ]
+      },
+      {
+        semestre: 2,
+        ramos: [
+          "CONSTRUCCION DEL PENSAMIENTO INFANTIL: MATEMATIZACION INICIAL 1",
+          "CONSTRUCCION DEL PENSAMIENTO INFANTIL: HABILIDADES CIENTIFICAS INICIALES 1",
+          "CONSTRUCCION DEL PENSAMIENTO INFANTIL: HABILIDADES HISTORICAS INICIALES 1",
+          "NEUROCIENCIAS Y EDUCACION",
+          "CONSTRUCCION DEL PENSAMIENTO INFANTIL: COMPRENSION Y PRODUCCION DE TEXTOS 1",
+          "EXPERIENCIA PEDAGOGICA INTEGRADA 2",
+          "EXPERIENCIA PEDAGOGICA INTEGRADA 3"
+        ]
+      },
+      {
+        semestre: 3,
+        ramos: [
+          "CONSTRUCCION DEL PENSAMIENTO INFANTIL: MATEMATIZACION INICIAL 2",
+          "CONSTRUCCION DEL PENSAMIENTO INFANTIL: HABILIDADES CIENTIFICAS INICIALES 2",
+          "CONSTRUCCION DEL PENSAMIENTO INFANTIL: HABILIDADES HISTORICAS INICIALES 2",
+          "CONSTRUCCION DEL PENSAMIENTO INFANTIL: COMPRENSION Y PRODUCCION DE TEXTOS 2",
+          "EDUCAR EN Y PARA LA DIVERSIDAD",
+          "ETICA CRISTIANA",
+          "PRACTICA DOCENTE INICIAL",
+          "TALLER DE PSICOLOGIA DEL APRENDIZAJE",
+          "INGLES 1"
+        ]
+      },
+      {
+        semestre: 4,
+        ramos: [
+          "CONSTRUCCION DEL PENSAMIENTO INFANTIL: LITERACIDAD INICIAL 1",
+          "CONSTRUCCION DEL PENSAMIENTO INFANTIL: ESPACIALIDAD Y MEDICION",
+          "EXPERIENCIA PEDAGOGICA INTEGRADA 5",
+          "CONSTRUCCION DEL PENSAMIENTO INFANTIL: INDAGACION CIENTIFICA 1",
+          "CONSTRUCCION DEL PENSAMIENTO INFANTIL: HABILIDADES GEOGRAFICAS INICIALES",
+          "EXPERIENCIA PEDAGOGICA INTEGRADA 4",
+          "FUNDAMENTOS FILOSOFICOS Y SOCIALES DE LA EDUCACION",
+          "PSICOLOGIA SOCIAL APLICADA EN LA ESCUELA Y SU COMUNIDAD"
+        ]
+      },
+      {
+        semestre: 5,
+        ramos: [
+          "CONSTRUCCION DEL PENSAMIENTO INFANTIL: LITERACIDAD INICIAL 2",
+          "CONSTRUCCION DEL PENSAMIENTO INFANTIL: NUMERACIDAD Y ORGANIZACION DE DATOS",
+          "CONSTRUCCION DEL PENSAMIENTO INFANTIL: COMPETENCIAS CIUDADANAS",
+          "EXPERIENCIA PEDAGOGICA INTEGRADA 6",
+          "CONSTRUCCION DEL PENSAMIENTO INFANTIL: INDAGACION CIENTIFICA 2",
+          "TECNOLOGIAS DIGITALES PARA EL APRENDIZAJE Y EL DESARROLLO PROFESIONAL DOCENTE",
+          "TEORIA Y PLANIFICACION CURRICULAR",
+          "INGLES 2"
+        ]
+      },
+      {
+        semestre: 6,
+        ramos: [
+          "CONSTRUCCION DEL CONOCIMIENTO CIENTIFICO INFANTIL: FISICA, QUIMICA Y BIOLOGIA",
+          "EVALUACION DEL Y PARA EL APRENDIZAJE",
+          "CONSTRUCCION DEL PENSAMIENTO HISTORICO: HISTORIA UNIVERSAL E HISTORIA DE CHILE",
+          "CONSTRUCCION DEL CONOCIMIENTO LITERARIO: LITERATURA INFANTIL Y JUVENIL",
+          "CONSTRUCCION DEL CONOCIMIENTO MATEMATICO: ALGEBRA",
+          "PRACTICA DOCENTE INTERMEDIA"
+        ]
+      },
+      {
+        semestre: 7,
+        ramos: [
+          "EXPERIENCIA PEDAGOGICA INTEGRADA 7",
+          "CONSTRUCCION DEL PENSAMIENTO INFANTIL: LENGUAJES ARTISTICOS INTEGRADOS",
+          "IDENTIDAD PROFESIONAL DOCENTE",
+          "POLITICAS PUBLICAS EDUCATIVAS Y GESTION ESCOLAR",
+          "INGLES 3"
+        ]
+      },
+      {
+        semestre: 8,
+        ramos: [
+          "EXPERIENCIA PEDAGOGICA INTEGRADA 8",
+          "INGLES 4",
+          "ESTRATEGIAS DISCURSIVAS PARA COMUNICAR Y ENSEÑAR EL CONOCIMIENTO DISCIPLINAR"
+        ]
+      },
+      {
+        semestre: 9,
+        ramos: [
+          "TRABAJO DE TITULACION",
+          "INVESTIGACION EDUCATIVA Y PEDAGOGICA"
+        ]
+      },
+      {
+        semestre: 10,
+        ramos: [
+          "PRACTICA DOCENTE FINAL"
+        ]
+      }
+    ];
 
-    semestres.forEach(semestre => {
-      const ramos = semestre.querySelectorAll('.ramo');
-      allRamos = allRamos.concat(Array.from(ramos));
-      
-      ramos.forEach(ramo => {
-        // Cargar estado guardado
-        const id = ramo.dataset.id;
-        if (localStorage.getItem(id) === 'true') {
-          ramo.classList.add('aprobado');
-        }
-
-        ramo.addEventListener('click', () => {
-          ramo.classList.toggle('aprobado');
-          localStorage.setItem(id, ramo.classList.contains('aprobado'));
-          updateProgress();
-        });
-      });
-    });
-
-    function updateProgress() {
-      let totalAprobados = 0;
-      let totalRamos = 0;
-
-      semestres.forEach(semestre => {
-        const ramos = semestre.querySelectorAll('.ramo');
-        const aprobados = semestre.querySelectorAll('.ramo.aprobado').length;
-        const progressBar = semestre.querySelector('.progress-bar');
-        const porcentaje = Math.round((aprobados / ramos.length) * 100);
-        progressBar.style.width = porcentaje + '%';
-        progressBar.textContent = porcentaje + '%';
-
-        totalAprobados += aprobados;
-        totalRamos += ramos.length;
-      });
-
-      const totalPorcentaje = Math.round((totalAprobados / totalRamos) * 100);
-      generalBar.style.width = totalPorcentaje + '%';
-      generalBar.textContent = totalPorcentaje + '%';
+    function actualizarAvance() {
+      const total = document.querySelectorAll('.ramo').length;
+      const aprobados = document.querySelectorAll('.ramo.aprobado').length;
+      const porcentaje = ((aprobados / total) * 100).toFixed(1);
+      avanceBox.textContent = `Avance: ${porcentaje}% (${aprobados} de ${total} ramos)`;
     }
 
-    // Inicializar progreso al cargar
-    updateProgress();
+    datos.forEach(({ semestre, ramos }) => {
+      const contenedor = document.createElement('div');
+      contenedor.className = 'semestre';
+      contenedor.innerHTML = `<div class="titulo-semestre">Semestre ${semestre}</div>`;
+
+      const cajaRamos = document.createElement('div');
+      cajaRamos.className = 'contenedor-ramos';
+
+      ramos.forEach(nombre => {
+        const tarjeta = document.createElement('div');
+        tarjeta.className = 'ramo';
+        tarjeta.textContent = nombre;
+
+        tarjeta.addEventListener('click', () => {
+          tarjeta.classList.toggle('aprobado');
+          actualizarAvance();
+        });
+
+        cajaRamos.appendChild(tarjeta);
+      });
+
+      contenedor.appendChild(cajaRamos);
+      malla.appendChild(contenedor);
+    });
+
+    actualizarAvance();
   </script>
 </body>
 </html>
+
